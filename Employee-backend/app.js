@@ -33,11 +33,6 @@ db.sequelize.authenticate()
         console.error('Unable to connect to the database:', err);
     });
 
-
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to employee application." });
-});
-
 require("./routes/employee.routes")(app);
 
 const PORT = process.env.PORT || 8080;
