@@ -1,4 +1,3 @@
-const employee = require("../controllers/employee.controller");
 module.exports = app => {
     const employee = require("../controllers/employee.controller.js");
 

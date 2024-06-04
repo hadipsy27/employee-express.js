@@ -37,8 +37,8 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    const name = req.query.name;
-    var condition = name ? {name: {[Op.iLike]: `%${name}%`}} : null;
+    const id = req.query.id;
+    var condition = id ? {id: {[Op.iLike]: `%${id}%`}} : null;
 
     Employee.findAll({where: condition})
         .then(data => {
