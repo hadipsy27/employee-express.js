@@ -6,14 +6,15 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        employee_id: {
+        employeeId: {
             type: Sequelize.INTEGER,
             allowNull: false,
             unique: true,
             references: {
                 model: 'employee',
                 key: 'id'
-            }
+            },
+            field:'employee_id'
         },
         name: {
             type: Sequelize.STRING,
@@ -27,13 +28,13 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        created_by: {
+        createdBy: {
             type: Sequelize.STRING,
-            allowNull: false,
+            field: 'created_by'
         },
-        updated_by: {
+        updatedBy: {
             type: Sequelize.STRING,
-            allowNull: false,
+            field: 'updated_by'
         },
         createdAt: {
             type: Sequelize.DATE,

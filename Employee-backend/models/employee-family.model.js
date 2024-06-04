@@ -6,14 +6,15 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        employee_id: {
+        employeeId: {
             type: Sequelize.INTEGER,
             allowNull: false,
             unique: true,
             references: {
                 model: 'employee',
                 key: 'id'
-            }
+            },
+            field:'employee_id'
         },
         name: {
             type: Sequelize.STRING,
@@ -24,38 +25,43 @@ module.exports = (sequelize, Sequelize) => {
         job: {
             type: Sequelize.STRING,
         },
-        place_of_birth: {
+        placeOfBirth: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'place_of_birth'
         },
-        date_of_birth: {
+        dateOfBirth: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'date_of_birth'
         },
         religion: {
             type: Sequelize.ENUM,
             values: ['Islam', 'Katolik', 'Buda','Protestan', 'Konghucu'],
         },
-        is_life: {
+        isLife: {
             type: Sequelize.BOOLEAN,
-            default: true
+            default: true,
+            field: 'is_life'
         },
-        is_divorced: {
+        isDivorced: {
             type: Sequelize.BOOLEAN,
-            default: false
+            default: false,
+            field: 'is_divorced'
         },
-        relation_status: {
+        relationStatus: {
             type: Sequelize.ENUM,
             values: ['Suami', 'Istri', 'Anak', 'Anak Sambung'],
             allowNull: false,
+            field: 'relation_status'
         },
-        created_by: {
+        createdBy: {
             type: Sequelize.STRING,
-            allowNull: false,
+            field: 'created_by'
         },
-        updated_by: {
+        updatedBy: {
             type: Sequelize.STRING,
-            allowNull: false,
+            field: 'updated_by'
         },
         createdAt: {
             type: Sequelize.DATE,

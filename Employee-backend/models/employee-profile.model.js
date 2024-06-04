@@ -6,40 +6,47 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        employee_id: {
+        employeeId: {
             type: Sequelize.INTEGER,
             allowNull: false,
             unique: true,
             references: {
                 model: 'employee',
                 key: 'id'
-            }
+            },
+            field:'employee_id'
         },
-        place_of_birth: {
+        placeOfBirth: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'place_of_birth'
         },
-        date_of_birth: {
+        dateOfBirth: {
             type: Sequelize.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'date_of_birth'
         },
         gender: {
             type: Sequelize.ENUM,
             values: ['Laki-laki', 'perempuan'],
             allowNull: false,
         },
-        is_married: {
+        isMarried: {
             type: Sequelize.BOOLEAN,
+            field: 'is_married'
         },
-        prof_pict: {
+        profPict: {
             type: Sequelize.STRING,
-            allowNull: true
+            allowNull: true,
+            field: 'prof_pict'
         },
-        created_by: {
-            type: Sequelize.STRING
+        createdBy: {
+            type: Sequelize.STRING,
+            field: 'created_by'
         },
-        updated_by: {
-            type: Sequelize.STRING
+        updatedBy: {
+            type: Sequelize.STRING,
+            field: 'updated_by'
         },
         createdAt: {
             type: Sequelize.DATE,

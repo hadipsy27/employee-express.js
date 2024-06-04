@@ -8,28 +8,34 @@ module.exports = (sequelize, Sequelize) => {
         },
         nik: {
             type: Sequelize.STRING,
+            unique: true,
             allowNull: true
         },
         name: {
             type: Sequelize.STRING,
             allowNull: true
         },
-        is_active: {
+        isActive: {
             type: Sequelize.BOOLEAN,
+            field: 'is_active'
         },
-        start_date: {
+        startDate: {
             type: DataTypes.DATE,
             allowNull: false,
+            field: 'start_date'
         },
-        end_date: {
+        endDate: {
             type: DataTypes.DATE,
             allowNull: false,
+            field: 'end_date'
         },
-        created_by: {
-            type: Sequelize.STRING
+        createdBy: {
+            type: Sequelize.STRING,
+            field: 'created_by'
         },
-        updated_by: {
-            type: Sequelize.STRING
+        updatedBy: {
+            type: Sequelize.STRING,
+            field: 'updated_by'
         },
         createdAt: {
             type: Sequelize.DATE,
