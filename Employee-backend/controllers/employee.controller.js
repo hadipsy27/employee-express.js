@@ -25,7 +25,7 @@ exports.create = (req, res) => {
 
     Employee.create(employee)
         .then(data => {
-            res.send(data);
+            res.status(201).send(data);
         })
         .catch(err => {
             res.status(500).send({
@@ -78,17 +78,9 @@ exports.update = (req, res) => {
     Employee.update(req.body, {
         where: {id: id}
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Employee was updated successfully."
-                });
-            } else {
-                res.send({
-                    message: `Cannot update Employee with id=${id}. Maybe Employee was not found or req.body is empty!`
-                });
-            }
-        })
+        .then(() => res.status(200).send({
+            message: "Employee was updated successfully."
+        }))
         .catch(err => {
             res.status(500).send({
                 message: "Error updating Employee with id=" + id
@@ -103,17 +95,9 @@ exports.delete = (req, res) => {
     Employee.destroy({
         where: {id: id}
     })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Employee was deleted successfully!"
-                });
-            } else {
-                res.send({
-                    message: `Cannot delete Employee with id=${id}. Maybe Employee was not found!`
-                });
-            }
-        })
+        .then(() => res.status(200).send({
+            message: "Employee was deleted successfully."
+        }))
         .catch(err => {
             res.status(500).send({
                 message: "Error deleting Employee with id=" + id
