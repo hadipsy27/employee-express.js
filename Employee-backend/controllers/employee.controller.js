@@ -1,5 +1,8 @@
 const db = require("../models");
 const Employee = db.employee;
+const Profile = db.employeeProfile;
+const Family = db.employeeFamily;
+const Education = db.education;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Employee
@@ -37,10 +40,13 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    const id = req.query.id;
-    var condition = id ? {id: {[Op.iLike]: `%${id}%`}} : null;
+    const name = req.query.name;
+    var condition = name ? {name: {[Op.iLike]: `%${name}%`}} : null;
 
-    Employee.findAll({where: condition})
+    Employee.findAll(
+        {
+            where: condition
+        })
         .then(data => {
             res.send(data);
         })
@@ -55,7 +61,11 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Employee.findByPk(id)
+    Employee.findAll({where: {id: id},include: [
+            { model: Profile, as: 'employeeProfile' },
+            { model: Family, as: 'employeeFamily'},
+            { model: Education, as: 'education'}
+        ]})
         .then(data => {
             if (data) {
                 res.send(data);

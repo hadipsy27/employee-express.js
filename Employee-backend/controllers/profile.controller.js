@@ -1,6 +1,5 @@
 const db = require("../models");
-const {create} = require("./employee.controller");
-const Education = db.education;
+const Profile = db.employeeProfile;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
@@ -12,97 +11,94 @@ exports.create = (req, res) => {
         });
         return;
     }
-
     // TODO: Implement validation to check if employee exists (e.g., using findById)
-
-    const education = {
+    const profile = {
         employeeId, // Use retrieved employeeId
-        name: req.body.name,
-        level: req.body.level,
-        description: req.body.description,
+        placeOfBirth: req.body.placeOfBirth,
+        dateOfBirth: req.body.dateOfBirth,
+        gender: req.body.gender,
+        isMarried: req.body.isMarried,
+        profPict: req.body.profPict,
         createdBy: req.body.createdBy,
         updatedBy: req.body.updatedBy
     };
 
-    Education.create(education)
-        .then(data => {
-            res.status(201).send(data);
+    Profile.create(profile)
+       .then(data => {
+            res.send(data);
         })
-        .catch(err => {
+       .catch(err => {
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while creating the Education."
-            });
-        });
-};
-
-exports.findAll = (req, res) => {
-    const name = req.query.name;
-    var condition = name ? {name: {[Op.iLike]: `%${name}%`}} : null;
-
-    Education.findAll({where: condition})
-        .then(data => {
-            res.status(200).send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving Educations."
+                    err.message || "Some error occurred while creating the Profile."
             });
         });
 }
 
+exports.findAll = (req, res) => {
+    const id = req.query.id;
+    var condition = id? {id: {[Op.iLike]: `%${id}%`}} : null;
+
+    Profile.findAll({where: condition})
+       .then(data => {
+            res.status(200).send(data);
+        })
+       .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving profiles."
+            });
+        });
+}
 
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Education.findByPk(id)
-        .then(data => {
+    Profile.findByPk(id)
+       .then(data => {
             if (data) {
                 res.status(200).send(data);
             } else {
                 res.status(404).send({
-                    message: `Cannot find Education with id=${id}.`
+                    message: "Profile not found with id " + id
                 });
             }
         })
-        .catch(err => {
+       .catch(err => {
             res.status(500).send({
-                message: "Error retrieving Education with id=" + id
+                message: "Error retrieving Profile with id=" + id
             });
         });
 }
-
 
 exports.update = (req, res) => {
     const id = req.params.id;
 
-    Education.update(req.body, {
+    Profile.update(req.body, {
         where: {id: id}
     })
-        .then(() => res.status(200).send({
-            message: "Education was updated successfully."
+       .then(() => res.status(200).send({
+            message: "Profile was updated successfully."
         }))
-        .catch(err => {
+       .catch(err => {
             res.status(500).send({
-                message: "Error updating Education with id=" + id
+                message: "Error updating Profile with id=" + id
             });
         });
 }
 
-
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    Education.destroy({
+    Profile.destroy({
         where: {id: id}
     })
-        .then(() => res.status(200).send({
-            message: "Education was deleted successfully!"
+       .then(() => res.status(200).send({
+            message: "Profile was deleted successfully!"
         }))
-        .catch(err => {
+       .catch(err => {
             res.status(500).send({
-                message: "Could not delete Education with id=" + id
+                message: "Could not delete Profile with id=" + id
             });
         });
 }

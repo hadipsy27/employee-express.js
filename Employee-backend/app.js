@@ -25,6 +25,8 @@ db.sequelize.authenticate()
 
 require("./routes/employee.routes")(app);
 require("./routes/education.routes")(app);
+require("./routes/family.routes")(app);
+require("./routes/profile.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
