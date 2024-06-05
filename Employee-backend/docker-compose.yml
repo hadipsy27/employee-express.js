@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
-      POSTGRES_DB: employeedb
+      POSTGRES_DB: data_kepegawaian
 
 # Cara menjalankan
 # docker compose up dev-emp -d
