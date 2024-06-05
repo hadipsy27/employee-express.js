@@ -27,13 +27,13 @@ db.employeeProfile = require("./employee-profile.model.js")(sequelize, Sequelize
 db.education = require("./education.model.js")(sequelize, Sequelize);
 db.employeeFamily = require("./employee-family.model.js")(sequelize, Sequelize);
 
-db.employee.hasOne(db.employeeProfile, {foreignKey: 'employee_id', as: 'employee'});
-db.employeeProfile.belongsTo(db.employee, {foreignKey: 'employee_id', as: 'employeeProfile'});
+db.employee.hasOne(db.employeeProfile, {foreignKey: 'employeeId', as: 'employeeProfile'});
+db.employeeProfile.belongsTo(db.employee, {foreignKey: 'employeeId', as: 'employeeProfile'});
 
-db.employee.hasMany(db.education, {foreignKey: 'employee_id', as: 'education'});
-db.education.belongsTo(db.employee, {foreignKey: 'employee_id', as: 'education'});
+db.employee.hasMany(db.education, {foreignKey: 'employeeId', as: 'education'});
+db.education.belongsTo(db.employee, {foreignKey: 'employeeId', as: 'education'});
 
-db.employee.hasMany(db.employeeFamily, {foreignKey: 'employee_id', as: 'employeeFamily'});
-db.employeeFamily.belongsTo(db.employee, {foreignKey: 'employee_id', as: 'employeeFamily'});
+db.employee.hasMany(db.employeeFamily, {foreignKey: 'employeeId', as: 'employeeFamily'});
+db.employeeFamily.belongsTo(db.employee, {foreignKey: 'employeeId', as: 'employeeFamily'});
 
 module.exports = db;
