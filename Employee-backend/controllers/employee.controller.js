@@ -67,7 +67,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
-    Employee.findAll({where: {id: id},include: [
+    Employee.findOne({where: {id: id},include: [
             { model: Profile, as: 'employeeProfile' },
             { model: Family, as: 'employeeFamily'},
             { model: Education, as: 'education'}
