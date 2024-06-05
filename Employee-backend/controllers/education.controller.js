@@ -3,8 +3,8 @@ const {create} = require("./employee.controller");
 const Education = db.education;
 const Op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
-    const employeeId = req.params.id; // Get employeeId from URL parameter
+exports.create = async (req, res) => {
+    const employeeId = req.params.id;
 
     if (!employeeId) {
         res.status(400).send({
@@ -13,27 +13,39 @@ exports.create = (req, res) => {
         return;
     }
 
-    // TODO: Implement validation to check if employee exists (e.g., using findById)
+    try {
+        const employee = await Employee.findByPk(employeeId);
 
-    const education = {
-        employeeId, // Use retrieved employeeId
-        name: req.body.name,
-        level: req.body.level,
-        description: req.body.description,
-        createdBy: req.body.createdBy,
-        updatedBy: req.body.updatedBy
-    };
-
-    Education.create(education)
-        .then(data => {
-            res.status(201).send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Education."
+        if (!employee) {
+            return res.status(404).send({
+                message: `Employee with ID ${employeeId} not found.`
             });
+        }
+        const education = {
+            employeeId,
+            name: req.body.name,
+            level: req.body.level,
+            description: req.body.description,
+            createdBy: req.body.createdBy,
+            updatedBy: req.body.updatedBy
+        };
+
+        Education.create(education)
+            .then(data => {
+                res.status(201).send(data);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while creating the Education."
+                });
+            });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({
+            message: "Internal server error."
         });
+    }
 };
 
 exports.findAll = (req, res) => {

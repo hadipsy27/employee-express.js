@@ -1,9 +1,10 @@
 const db = require("../models");
 const Family = db.employeeFamily;
+const Employee = db.employee;
 const Op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
-    const employeeId = req.params.id; // Get employeeId from URL parameter
+exports.create = async (req, res) => {
+    const employeeId = req.params.id;
 
     if (!employeeId) {
         res.status(400).send({
@@ -12,33 +13,46 @@ exports.create = (req, res) => {
         return;
     }
 
-    // TODO: Implement validation to check if employee exists (e.g., using findById)
+    try {
+        const employee = await Employee.findByPk(employeeId);
 
-    const family = {
-        employeeId, // Use retrieved employeeId
-        name: req.body.name,
-        identifier: req.body.identifier,
-        job: req.body.job,
-        placeOfBirth: req.body.placeOfBirth,
-        dateOfBirth: req.body.dateOfBirth,
-        religion: req.body.religion,
-        isLife: req.body.isLife,
-        isDivorced: req.body.isDivorced,
-        relationStatus: req.body.relationStatus,
-        createdBy: req.body.createdBy,
-        updatedBy: req.body.updatedBy
-    };
-
-    Family.create(family)
-        .then(data => {
-            res.status(201).send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Family."
+        if (!employee) {
+            return res.status(404).send({
+                message: `Employee with ID ${employeeId} not found.`
             });
+        }
+
+        const family = {
+            employeeId,
+            name: req.body.name,
+            identifier: req.body.identifier,
+            job: req.body.job,
+            placeOfBirth: req.body.placeOfBirth,
+            dateOfBirth: req.body.dateOfBirth,
+            religion: req.body.religion,
+            isLife: req.body.isLife,
+            isDivorced: req.body.isDivorced,
+            relationStatus: req.body.relationStatus,
+            createdBy: req.body.createdBy,
+            updatedBy: req.body.updatedBy
+        };
+
+        Family.create(family)
+            .then(data => {
+                res.status(201).send(data);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while creating the Family."
+                });
+            });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({
+            message: "Internal server error."
         });
+    }
 };
 
 exports.findAll = (req, res) => {

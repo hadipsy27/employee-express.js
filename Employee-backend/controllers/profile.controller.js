@@ -1,9 +1,10 @@
 const db = require("../models");
 const Profile = db.employeeProfile;
+const Employee = db.employee;
 const Op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
-    const employeeId = req.params.id; // Get employeeId from URL parameter
+exports.create = async (req, res) => {
+    const employeeId = req.params.id;
 
     if (!employeeId) {
         res.status(400).send({
@@ -11,28 +12,42 @@ exports.create = (req, res) => {
         });
         return;
     }
-    // TODO: Implement validation to check if employee exists (e.g., using findById)
-    const profile = {
-        employeeId, // Use retrieved employeeId
-        placeOfBirth: req.body.placeOfBirth,
-        dateOfBirth: req.body.dateOfBirth,
-        gender: req.body.gender,
-        isMarried: req.body.isMarried,
-        profPict: req.body.profPict,
-        createdBy: req.body.createdBy,
-        updatedBy: req.body.updatedBy
-    };
 
-    Profile.create(profile)
-       .then(data => {
-            res.send(data);
-        })
-       .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Profile."
+    try {
+        const employee = await Employee.findByPk(employeeId);
+
+        if (!employee) {
+            return res.status(404).send({
+                message: `Employee with ID ${employeeId} not found.`
             });
+        }
+        const profile = {
+            employeeId,
+            placeOfBirth: req.body.placeOfBirth,
+            dateOfBirth: req.body.dateOfBirth,
+            gender: req.body.gender,
+            isMarried: req.body.isMarried,
+            profPict: req.body.profPict,
+            createdBy: req.body.createdBy,
+            updatedBy: req.body.updatedBy
+        };
+
+        Profile.create(profile)
+            .then(data => {
+                res.send(data);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message:
+                        err.message || "Some error occurred while creating the Profile."
+                });
+            });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({
+            message: "Internal server error."
         });
+    }
 }
 
 exports.findAll = (req, res) => {
