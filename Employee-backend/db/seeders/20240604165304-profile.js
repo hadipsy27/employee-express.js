@@ -9,7 +9,7 @@ module.exports = {
         place_of_birth: 'Jakarta',
         date_of_birth: '1990-01-01',
         gender: 'Laki-laki',
-        is_married: false,
+        is_married: true,
         prof_pict: 'profile_picture.jpg',
         created_by: 'admin',
         updated_by: 'admin',
