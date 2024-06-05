@@ -1,3 +1,4 @@
+const employee = require("../controllers/employee.controller");
 module.exports = app => {
     const employee = require("../controllers/employee.controller.js");
 
@@ -6,6 +7,8 @@ module.exports = app => {
     router.post("/", employee.create);
 
     router.get("/", employee.findAll);
+
+    router.get("/report", employee.employeeReport)
 
     router.get("/:id", employee.findOne);
 

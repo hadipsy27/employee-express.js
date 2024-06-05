@@ -1,3 +1,4 @@
+let {pool: pool} = require('../config/pool.config');
 const db = require("../models");
 const Employee = db.employee;
 const Profile = db.employeeProfile;
@@ -45,7 +46,12 @@ exports.findAll = (req, res) => {
 
     Employee.findAll(
         {
-            where: condition
+            where: condition,
+            include: [
+                { model: Profile, as: 'employeeProfile' },
+                { model: Family, as: 'employeeFamily'},
+                { model: Education, as: 'education'}
+            ]
         })
         .then(data => {
             res.send(data);
@@ -113,4 +119,42 @@ exports.delete = (req, res) => {
                 message: "Error deleting Employee with id=" + id
             });
         });
+}
+
+
+exports.employeeReport = (req, res) => {
+    pool.query('SELECT\n' +
+        '  e.id AS employee_id,\n' +
+        '  e.nik,\n' +
+        '  e.name,\n' +
+        '  CASE WHEN e.is_active THEN \'true\' ELSE \'false\' END AS is_active,\n' +
+        '  ep.gender,\n' +
+        '  EXTRACT(YEAR FROM AGE(ep.date_of_birth)) || \' Years Old\' AS age,\n' +
+        '  ed."name" AS school_name,\n' +
+        '  ed.level as level,\n' +
+        '  COALESCE(\n' +
+        '      (CASE WHEN ef.suami > 0 THEN ef.suami || \' Suami & \' ELSE \'\' END) ||\n' +
+        '      (CASE WHEN ef.istri > 0 THEN ef.istri || \' Istri & \' ELSE \'\' END) ||\n' +
+        '      (CASE WHEN ef.anak > 0 THEN ef.anak || \' Anak \' ELSE \'\' END) ||\n' +
+        '      (CASE WHEN ef.anak_sambung > 0 THEN ef.anak_sambung || \' & Anak Sambung\' ELSE \'\' END),\n' +
+        '      \'-\'\n' +
+        '  ) AS family_data\n' +
+        'FROM employee e\n' +
+        'LEFT JOIN employee_profile ep ON e.id = ep.employee_id\n' +
+        'LEFT JOIN education ed ON e.id = ed.employee_id\n' +
+        'LEFT JOIN (\n' +
+        '  SELECT employee_id,\n' +
+        '         COUNT(CASE WHEN relation_status = \'Suami\' THEN 1 ELSE NULL END) AS suami,\n' +
+        '         COUNT(CASE WHEN relation_status = \'Istri\' THEN 1 ELSE NULL END) AS istri,\n' +
+        '         COUNT(CASE WHEN relation_status = \'Anak\' THEN 1 ELSE NULL END) AS anak,\n' +
+        '         COUNT(CASE WHEN relation_status = \'Anak Sambung\' THEN 1 ELSE NULL END) AS anak_sambung\n' +
+        '  FROM employee_family\n' +
+        '  WHERE employee_id IS NOT NULL\n' +
+        '  GROUP BY employee_id\n' +
+        ') ef ON e.id = ef.employee_id;' +
+        '', (err, result) => {
+        if (err) throw err;
+
+        res.status(200).send(result.rows);
+    })
 }

@@ -1,6 +1,6 @@
 const db = require("../models");
-const {create} = require("./employee.controller");
 const Education = db.education;
+const Employee = db.employee;
 const Op = db.Sequelize.Op;
 
 exports.create = async (req, res) => {
